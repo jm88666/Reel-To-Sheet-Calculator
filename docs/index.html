@@ -122,12 +122,6 @@
     .btn:hover { background: #009a59; }
     .btn:active { background: #008a4f; transform: translateY(1px); }
 
-    .out {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
     .kpi {
       background: #f3f6ff;
       border: 1px solid #dbe5ff;
@@ -157,6 +151,26 @@
       margin-top: 6px;
       line-height: 1.35;
     }
+
+    /* Rechterkant structuur */
+    .sectionTitle{
+      font-size: 14px;
+      font-weight: 900;
+      margin: 6px 0 10px;
+      color: #111;
+    }
+
+    .sectionBox{
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #e3e9f7;
+    }
+
+    .outGrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
   </style>
 </head>
 
@@ -165,13 +179,13 @@
 
   <div class="topbar">
     <div class="logoBox">
-      <div class="siteLabel">Bainfurt</div>
+      <div class="siteLabel">Baienfurt</div>
     </div>
 
     <div class="titleblock">
       <h1>Rollen-zu-Bogen Rechner</h1>
       <div class="subtitle">
-        Schneller &Uuml;berblick &uuml;ber Rollenl&auml;nge, Bogenanzahl, Sets und ob der Auftrag erf&uuml;llt wird.
+        Rollenlänge, Bogen, Paletten und Auftragsprüfung. Zusätzlich Rollengewicht und Durchmesser berechnen.
       </div>
     </div>
   </div>
@@ -179,7 +193,7 @@
   <div class="grid">
 
     <div class="card">
-      <label>Au&szlig;endurchmesser der Rolle (mm)</label>
+      <label>Außendurchmesser der Rolle (mm)</label>
       <input id="dOut" placeholder="Beispiel 1600">
 
       <div class="row">
@@ -188,13 +202,31 @@
           <input id="dCore" value="330">
         </div>
         <div>
-          <label>Materialst&auml;rke (&micro;m)</label>
+          <label>Materialstärke (µm)</label>
           <input id="thickness" placeholder="Beispiel 380">
         </div>
       </div>
 
-      <label>Bogenl&auml;nge (mm)</label>
-      <input id="sheetLen" placeholder="Beispiel 850 &rarr; wird 850,5" onblur="enforceHalf(this)">
+      <div class="row">
+        <div>
+          <label>Grammatur (g/m²)</label>
+          <input id="grammage" placeholder="Beispiel 265">
+        </div>
+        <div>
+          <label>Rollenbreite (mm)</label>
+          <input id="rollWidth" placeholder="Beispiel 2180">
+        </div>
+      </div>
+
+      <label>Rollengewicht (kg)</label>
+      <input id="rollWeightKg" placeholder="Beispiel 2500">
+      <div class="small">
+        Wenn der Außendurchmesser leer ist, wird er aus Rollengewicht, Grammatur, Rollenbreite, Kerndurchmesser und Materialstärke berechnet und automatisch in das Durchmesserfeld geschrieben.
+        Wenn das Rollengewicht leer ist, wird es aus Außendurchmesser, Grammatur und Rollenbreite berechnet und automatisch in das Rollengewichtfeld geschrieben.
+      </div>
+
+      <label>Bogenlänge (mm)</label>
+      <input id="sheetLen" placeholder="Beispiel 850 wird 850,5" onblur="enforceHalf(this)">
 
       <label>Anzahl der Bahnen</label>
       <select id="lanes">
@@ -208,7 +240,7 @@
         <option value="8">8 Bahnen</option>
       </select>
       <div class="small">
-        Nur die Gesamtanzahl der Bogen wird mit der Anzahl der Bahnen multipliziert.
+        Gesamtanzahl Bogen ist Bogen pro Bahn multipliziert mit der Anzahl der Bahnen.
       </div>
 
       <div class="row">
@@ -217,49 +249,71 @@
           <input id="sheetsPer" placeholder="Beispiel 2000">
         </div>
         <div>
-          <label>Noch ben&ouml;tigte Bogen</label>
+          <label>Noch benötigte Bogen</label>
           <input id="needed" placeholder="Beispiel 8500">
         </div>
       </div>
 
-      <button class="btn" id="calcBtn">BERECHNEN</button>
+      <button class="btn" id="calcBtn" type="button">BERECHNEN</button>
     </div>
 
     <div class="card">
-      <div class="out">
+
+      <div class="sectionTitle">ROLLE</div>
+      <div class="outGrid">
         <div class="kpi">
-          <div class="t">Rollenl&auml;nge (m)</div>
+          <div class="t">Rollenlänge (m)</div>
           <div class="v" id="rollLen">.</div>
         </div>
 
         <div class="kpi">
-          <div class="t">Bogen pro Bahn</div>
-          <div class="v" id="sheetsLane">.</div>
-        </div>
-
-        <div class="kpi">
-          <div class="t">Gesamtanzahl Bogen</div>
-          <div class="v" id="sheetsTotal">.</div>
-        </div>
-
-        <div class="kpi">
-          <div class="t">M&ouml;gliche Sets (pro Bahn)</div>
-          <div class="v" id="sets">.</div>
-        </div>
-
-        <div class="kpi">
-          <div class="t">Ausreichend</div>
-          <div class="v" id="enough">.</div>
-        </div>
-
-        <div class="kpi">
-          <div class="t">Differenz (Bogen)</div>
-          <div class="v" id="diff">.</div>
+          <div class="t">Rollengewicht (kg)</div>
+          <div class="v" id="rollWeightView">.</div>
         </div>
       </div>
 
-      <div class="small">
-        Hinweis: Sets werden pro Bahn berechnet. Die Gesamtanzahl der Bogen bezieht sich auf alle Bahnen.
+      <div class="sectionBox">
+        <div class="sectionTitle">BOGEN UND PALETTEN</div>
+        <div class="outGrid">
+          <div class="kpi">
+            <div class="t">Bogen pro Bahn</div>
+            <div class="v" id="sheetsLane">.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="t">Gesamtanzahl Bogen</div>
+            <div class="v" id="sheetsTotal">.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="t">Paletten möglich pro Bahn</div>
+            <div class="v" id="palletsLane">.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="t">Paletten gesamt</div>
+            <div class="v" id="palletsTotal">.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sectionBox">
+        <div class="sectionTitle">AUFTRAGSPRÜFUNG</div>
+        <div class="outGrid">
+          <div class="kpi">
+            <div class="t">Ausreichend</div>
+            <div class="v" id="enough">.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="t">Differenz (Bogen)</div>
+            <div class="v" id="diff">.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="small" style="margin-top:12px">
+        Gewicht und Durchmesser funktionieren ohne Bogenlänge. Bogen und Paletten benötigen eine Bogenlänge. Paletten benötigen die Angabe Bogen pro Palette.
       </div>
     </div>
 
@@ -268,7 +322,11 @@
 
 <script>
   function n(v){
-    return Number((v || "").toString().replace(",", "."));
+    return Number((v || "").toString().trim().replace(",", "."));
+  }
+
+  function formatComma(s){
+    return (s || "").toString().replace(".", ",");
   }
 
   function enforceHalf(input){
@@ -281,10 +339,58 @@
     if(!Number.isFinite(num0)) return;
 
     const num = Math.floor(num0) + 0.5;
-    input.value = num.toString().replace(".", ",");
+    input.value = formatComma(num.toString());
+  }
+
+  function resetOut(){
+    document.getElementById("rollLen").textContent = ".";
+    document.getElementById("rollWeightView").textContent = ".";
+    document.getElementById("sheetsLane").textContent = ".";
+    document.getElementById("sheetsTotal").textContent = ".";
+    document.getElementById("palletsLane").textContent = ".";
+    document.getElementById("palletsTotal").textContent = ".";
+    document.getElementById("diff").textContent = ".";
+    const enoughEl = document.getElementById("enough");
+    enoughEl.textContent = ".";
+    enoughEl.className = "v";
+  }
+
+  function setEnough(msg, isBad){
+    const enoughEl = document.getElementById("enough");
+    enoughEl.textContent = msg;
+    enoughEl.className = "v " + (isBad ? "bad" : "ok");
+  }
+
+  function calcOuterDiaFromWeightKg(kg, g, rwMm, dCoreMm, tMicron){
+    const widthM = rwMm / 1000;
+    const areaM2 = (kg * 1000) / g;
+    const lenM = areaM2 / widthM;
+    const D2 = (dCoreMm * dCoreMm) + ((4 * tMicron * lenM) / Math.PI);
+    if(!(D2 > dCoreMm * dCoreMm)) return null;
+    return Math.sqrt(D2);
+  }
+
+  function calcLengthFromDia(dOutMm, dCoreMm, tMicron){
+    if(!(dOutMm > dCoreMm) || !(tMicron > 0)) return null;
+    return ((Math.PI / (4 * (tMicron / 1000))) * (dOutMm * dOutMm - dCoreMm * dCoreMm)) / 1000;
+  }
+
+  function calcWeightFromLength(lenM, g, rwMm){
+    const area = lenM * (rwMm / 1000);
+    return (area * g) / 1000;
+  }
+
+  function updateRollWeightView(){
+    const viewEl = document.getElementById("rollWeightView");
+    const kgNow = n(document.getElementById("rollWeightKg").value);
+    if(viewEl){
+      viewEl.textContent = (kgNow > 0) ? kgNow.toFixed(1) : ".";
+    }
   }
 
   function calc(){
+    resetOut();
+
     const dOutEl = document.getElementById("dOut");
     const dCoreEl = document.getElementById("dCore");
     const thicknessEl = document.getElementById("thickness");
@@ -292,45 +398,85 @@
     const lanesEl = document.getElementById("lanes");
     const sheetsPerEl = document.getElementById("sheetsPer");
     const neededEl = document.getElementById("needed");
+    const grammageEl = document.getElementById("grammage");
+    const rollWidthEl = document.getElementById("rollWidth");
+    const rollWeightEl = document.getElementById("rollWeightKg");
 
     enforceHalf(sheetLenEl);
 
-    const dOut = n(dOutEl.value);
+    let dOut = n(dOutEl.value);
     const dCore = n(dCoreEl.value);
     const t = n(thicknessEl.value);
     const sl = n(sheetLenEl.value);
     const lanes = n(lanesEl.value) || 1;
     const sp = n(sheetsPerEl.value);
     const need = n(neededEl.value);
+    const g = n(grammageEl.value);
+    const rw = n(rollWidthEl.value);
+    const kgIn = n(rollWeightEl.value);
 
-    if(!Number.isFinite(dOut) || !Number.isFinite(dCore) || !Number.isFinite(t) || !Number.isFinite(sl)) return;
-    if(dOut <= dCore) return;
-    if(t <= 0 || sl <= 0) return;
+    if(!(dCore > 0) || !(t > 0)){
+      setEnough("EINGABE?", true);
+      updateRollWeightView();
+      return;
+    }
 
-    const len = ((Math.PI / (4 * (t / 1000))) * (dOut * dOut - dCore * dCore)) / 1000;
+    if(!(dOut > 0) && (kgIn > 0) && (g > 0) && (rw > 0)){
+      const dCalc = calcOuterDiaFromWeightKg(kgIn, g, rw, dCore, t);
+      if(dCalc){
+        dOut = dCalc;
+        dOutEl.value = formatComma(dCalc.toFixed(0));
+      }
+    }
+
+    if(!(dOut > dCore)){
+      setEnough("DURCHMESSER?", true);
+      updateRollWeightView();
+      return;
+    }
+
+    const len = calcLengthFromDia(dOut, dCore, t);
+    if(!(len > 0)){
+      setEnough("LÄNGE?", true);
+      updateRollWeightView();
+      return;
+    }
+
+    document.getElementById("rollLen").textContent = len.toFixed(1);
+
+    if(g > 0 && rw > 0){
+      const kgCalc = calcWeightFromLength(len, g, rw);
+      if(!(kgIn > 0)){
+        rollWeightEl.value = formatComma(kgCalc.toFixed(1));
+      }
+    }
+
+    updateRollWeightView();
+
+    if(!(sl > 0)){
+      setEnough("OK", false);
+      return;
+    }
+
     const perLane = (len * 1000) / sl;
     const total = perLane * lanes;
 
-    document.getElementById("rollLen").textContent = len.toFixed(1);
     document.getElementById("sheetsLane").textContent = Math.round(perLane).toString();
     document.getElementById("sheetsTotal").textContent = Math.round(total).toString();
 
     if(Number.isFinite(sp) && sp > 0){
-      document.getElementById("sets").textContent = (perLane / sp).toFixed(2);
-    } else {
-      document.getElementById("sets").textContent = ".";
+      const palletsLane = perLane / sp;
+      const palletsTotal = total / sp;
+      document.getElementById("palletsLane").textContent = palletsLane.toFixed(2);
+      document.getElementById("palletsTotal").textContent = palletsTotal.toFixed(2);
     }
 
-    const enoughEl = document.getElementById("enough");
     if(Number.isFinite(need) && need >= 0){
       const diffv = Math.round(total - need);
       document.getElementById("diff").textContent = diffv.toString();
-      enoughEl.textContent = diffv >= 0 ? "JA" : "NEIN";
-      enoughEl.className = "v " + (diffv >= 0 ? "ok" : "bad");
+      setEnough(diffv >= 0 ? "JA" : "NEIN", diffv < 0);
     } else {
-      document.getElementById("diff").textContent = ".";
-      enoughEl.textContent = ".";
-      enoughEl.className = "v";
+      setEnough("OK", false);
     }
   }
 
