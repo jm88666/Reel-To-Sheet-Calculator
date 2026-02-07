@@ -171,6 +171,27 @@
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
+
+    /* taal buttons */
+    .langBox{
+      margin-left: auto;
+      display:flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .langBtn{
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 900;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+    .langBtn.active{
+      background: #ffffff;
+      color:#0a7a2f;
+    }
   </style>
 </head>
 
@@ -179,140 +200,147 @@
 
   <div class="topbar">
     <div class="logoBox">
-      <div class="siteLabel">Baienfurt</div>
+      <div class="siteLabel">konvertia</div>
     </div>
 
     <div class="titleblock">
-      <h1>Rollen-zu-Bogen Rechner</h1>
-      <div class="subtitle">
+      <h1 data-i18n="title">Rollen-zu-Bogen Rechner</h1>
+      <div class="subtitle" data-i18n="subtitle">
         Rollenlänge, Bogen, Paletten und Auftragsprüfung. Zusätzlich Rollengewicht und Durchmesser berechnen.
       </div>
+    </div>
+
+    <div class="langBox" aria-label="Language switch">
+      <button class="langBtn" id="lang-de" type="button" onclick="setLang('de')">DE</button>
+      <button class="langBtn" id="lang-en" type="button" onclick="setLang('en')">EN</button>
+      <button class="langBtn" id="lang-nl" type="button" onclick="setLang('nl')">NL</button>
+      <button class="langBtn" id="lang-fi" type="button" onclick="setLang('fi')">FI</button>
     </div>
   </div>
 
   <div class="grid">
 
     <div class="card">
-      <label>Außendurchmesser der Rolle (mm)</label>
-      <input id="dOut" placeholder="Beispiel 1600">
+      <label data-i18n="lbl_dOut">Außendurchmesser der Rolle (mm)</label>
+      <input id="dOut" data-i18n-ph="ph_dOut" placeholder="Beispiel 1600">
 
       <div class="row">
         <div>
-          <label>Kerndurchmesser (mm)</label>
+          <label data-i18n="lbl_dCore">Kerndurchmesser (mm)</label>
           <input id="dCore" value="330">
         </div>
         <div>
-          <label>Materialstärke (µm)</label>
-          <input id="thickness" placeholder="Beispiel 380">
+          <label data-i18n="lbl_thickness">Materialstärke (µm)</label>
+          <input id="thickness" data-i18n-ph="ph_thickness" placeholder="Beispiel 380">
         </div>
       </div>
 
       <div class="row">
         <div>
-          <label>Grammatur (g/m²)</label>
-          <input id="grammage" placeholder="Beispiel 265">
+          <label data-i18n="lbl_grammage">Grammatur (g/m²)</label>
+          <input id="grammage" data-i18n-ph="ph_grammage" placeholder="Beispiel 265">
         </div>
         <div>
-          <label>Rollenbreite (mm)</label>
-          <input id="rollWidth" placeholder="Beispiel 2180">
+          <label data-i18n="lbl_rollWidth">Rollenbreite (mm)</label>
+          <input id="rollWidth" data-i18n-ph="ph_rollWidth" placeholder="Beispiel 2180">
         </div>
       </div>
 
-      <label>Rollengewicht (kg)</label>
-      <input id="rollWeightKg" placeholder="Beispiel 2500">
-      <div class="small">
+      <label data-i18n="lbl_rollWeightKg">Rollengewicht (kg)</label>
+      <input id="rollWeightKg" data-i18n-ph="ph_rollWeightKg" placeholder="Beispiel 2500">
+      <div class="small" data-i18n="hint_weight">
         Wenn der Außendurchmesser leer ist, wird er aus Rollengewicht, Grammatur, Rollenbreite, Kerndurchmesser und Materialstärke berechnet und automatisch in das Durchmesserfeld geschrieben.
         Wenn das Rollengewicht leer ist, wird es aus Außendurchmesser, Grammatur und Rollenbreite berechnet und automatisch in das Rollengewichtfeld geschrieben.
       </div>
 
-      <label>Bogenlänge (mm)</label>
-      <input id="sheetLen" placeholder="Beispiel 850 wird 850,5" onblur="enforceHalf(this)">
+      <label data-i18n="lbl_sheetLen">Bogenlänge (mm)</label>
+      <input id="sheetLen" data-i18n-ph="ph_sheetLen" placeholder="Beispiel 850 wird 850,5" onblur="enforceHalf(this)">
 
-      <label>Anzahl der Bahnen</label>
+      <label data-i18n="lbl_lanes">Anzahl der Bahnen</label>
       <select id="lanes">
-        <option value="1">1 Bahn</option>
-        <option value="2">2 Bahnen</option>
-        <option value="3">3 Bahnen</option>
-        <option value="4">4 Bahnen</option>
-        <option value="5">5 Bahnen</option>
-        <option value="6">6 Bahnen</option>
-        <option value="7">7 Bahnen</option>
-        <option value="8">8 Bahnen</option>
+        <option value="1" data-i18n="opt_lane_1">1 Bahn</option>
+        <option value="2" data-i18n="opt_lane_2">2 Bahnen</option>
+        <option value="3" data-i18n="opt_lane_3">3 Bahnen</option>
+        <option value="4" data-i18n="opt_lane_4">4 Bahnen</option>
+        <option value="5" data-i18n="opt_lane_5">5 Bahnen</option>
+        <option value="6" data-i18n="opt_lane_6">6 Bahnen</option>
+        <option value="7" data-i18n="opt_lane_7">7 Bahnen</option>
+        <option value="8" data-i18n="opt_lane_8">8 Bahnen</option>
       </select>
-      <div class="small">
+      <div class="small" data-i18n="hint_lanes">
         Gesamtanzahl Bogen ist Bogen pro Bahn multipliziert mit der Anzahl der Bahnen.
       </div>
 
       <div class="row">
         <div>
-          <label>Bogen pro Palette</label>
-          <input id="sheetsPer" placeholder="Beispiel 2000">
+          <label data-i18n="lbl_sheetsPer">Bogen pro Palette</label>
+          <input id="sheetsPer" data-i18n-ph="ph_sheetsPer" placeholder="Beispiel 2000">
         </div>
         <div>
-          <label>Noch benötigte Bogen</label>
-          <input id="needed" placeholder="Beispiel 8500">
+          <label data-i18n="lbl_needed">Noch benötigte Bogen</label>
+          <input id="needed" data-i18n-ph="ph_needed" placeholder="Beispiel 8500">
         </div>
       </div>
 
-      <button class="btn" id="calcBtn" type="button">BERECHNEN</button>
+      <button class="btn" id="calcBtn" type="button" data-i18n="btn_calc">BERECHNEN</button>
     </div>
 
     <div class="card">
 
-      <div class="sectionTitle">ROLLE</div>
+      <div class="sectionTitle" data-i18n="sec_reel">ROLLE</div>
       <div class="outGrid">
         <div class="kpi">
-          <div class="t">Rollenlänge (m)</div>
+          <div class="t" data-i18n="kpi_rollLen">Rollenlänge (m)</div>
           <div class="v" id="rollLen">.</div>
         </div>
 
         <div class="kpi">
-          <div class="t">Rollengewicht (kg)</div>
+          <div class="t" data-i18n="kpi_rollWeight">Rollengewicht (kg)</div>
           <div class="v" id="rollWeightView">.</div>
         </div>
       </div>
 
       <div class="sectionBox">
-        <div class="sectionTitle">BOGEN UND PALETTEN</div>
+        <div class="sectionTitle" data-i18n="sec_sheets">BOGEN UND PALETTEN</div>
         <div class="outGrid">
           <div class="kpi">
-            <div class="t">Bogen pro Bahn</div>
+            <div class="t" data-i18n="kpi_sheetsLane">Bogen pro Bahn</div>
             <div class="v" id="sheetsLane">.</div>
           </div>
 
           <div class="kpi">
-            <div class="t">Gesamtanzahl Bogen</div>
+            <div class="t" data-i18n="kpi_sheetsTotal">Gesamtanzahl Bogen</div>
             <div class="v" id="sheetsTotal">.</div>
           </div>
 
           <div class="kpi">
-            <div class="t">Paletten möglich pro Bahn</div>
+            <div class="t" data-i18n="kpi_palletsLane">Paletten möglich pro Bahn</div>
             <div class="v" id="palletsLane">.</div>
           </div>
 
           <div class="kpi">
-            <div class="t">Paletten gesamt</div>
+            <div class="t" data-i18n="kpi_palletsTotal">Paletten gesamt</div>
             <div class="v" id="palletsTotal">.</div>
           </div>
         </div>
       </div>
 
       <div class="sectionBox">
-        <div class="sectionTitle">AUFTRAGSPRÜFUNG</div>
+        <div class="sectionTitle" data-i18n="sec_order">AUFTRAGSPRÜFUNG</div>
         <div class="outGrid">
           <div class="kpi">
-            <div class="t">Ausreichend</div>
+            <div class="t" data-i18n="kpi_enough">Ausreichend</div>
             <div class="v" id="enough">.</div>
           </div>
 
           <div class="kpi">
-            <div class="t">Differenz (Bogen)</div>
+            <div class="t" data-i18n="kpi_diff">Differenz (Bogen)</div>
             <div class="v" id="diff">.</div>
           </div>
         </div>
       </div>
 
-      <div class="small" style="margin-top:12px">
+      <div class="small" style="margin-top:12px" data-i18n="hint_footer">
         Gewicht und Durchmesser funktionieren ohne Bogenlänge. Bogen und Paletten benötigen eine Bogenlänge. Paletten benötigen die Angabe Bogen pro Palette.
       </div>
     </div>
@@ -321,6 +349,347 @@
 </div>
 
 <script>
+  /* =========================
+     i18n (DE / EN / NL / FI)
+     ========================= */
+  let currentLang = "de";
+
+  const I18N = {
+    de: {
+      title: "Rollen-zu-Bogen Rechner",
+      subtitle: "Rollenlänge, Bogen, Paletten und Auftragsprüfung. Zusätzlich Rollengewicht und Durchmesser berechnen.",
+
+      lbl_dOut: "Außendurchmesser der Rolle (mm)",
+      ph_dOut: "Beispiel 1600",
+
+      lbl_dCore: "Kerndurchmesser (mm)",
+
+      lbl_thickness: "Materialstärke (µm)",
+      ph_thickness: "Beispiel 380",
+
+      lbl_grammage: "Grammatur (g/m²)",
+      ph_grammage: "Beispiel 265",
+
+      lbl_rollWidth: "Rollenbreite (mm)",
+      ph_rollWidth: "Beispiel 2180",
+
+      lbl_rollWeightKg: "Rollengewicht (kg)",
+      ph_rollWeightKg: "Beispiel 2500",
+
+      hint_weight:
+        "Wenn der Außendurchmesser leer ist, wird er aus Rollengewicht, Grammatur, Rollenbreite, Kerndurchmesser und Materialstärke berechnet und automatisch in das Durchmesserfeld geschrieben. " +
+        "Wenn das Rollengewicht leer ist, wird es aus Außendurchmesser, Grammatur und Rollenbreite berechnet und automatisch in das Rollengewichtfeld geschrieben.",
+
+      lbl_sheetLen: "Bogenlänge (mm)",
+      ph_sheetLen: "Beispiel 850 wird 850,5",
+
+      lbl_lanes: "Anzahl der Bahnen",
+      opt_lane_1: "1 Bahn",
+      opt_lane_2: "2 Bahnen",
+      opt_lane_3: "3 Bahnen",
+      opt_lane_4: "4 Bahnen",
+      opt_lane_5: "5 Bahnen",
+      opt_lane_6: "6 Bahnen",
+      opt_lane_7: "7 Bahnen",
+      opt_lane_8: "8 Bahnen",
+
+      hint_lanes: "Gesamtanzahl Bogen ist Bogen pro Bahn multipliziert mit der Anzahl der Bahnen.",
+
+      lbl_sheetsPer: "Bogen pro Palette",
+      ph_sheetsPer: "Beispiel 2000",
+
+      lbl_needed: "Noch benötigte Bogen",
+      ph_needed: "Beispiel 8500",
+
+      btn_calc: "BERECHNEN",
+
+      sec_reel: "ROLLE",
+      sec_sheets: "BOGEN UND PALETTEN",
+      sec_order: "AUFTRAGSPRÜFUNG",
+
+      kpi_rollLen: "Rollenlänge (m)",
+      kpi_rollWeight: "Rollengewicht (kg)",
+      kpi_sheetsLane: "Bogen pro Bahn",
+      kpi_sheetsTotal: "Gesamtanzahl Bogen",
+      kpi_palletsLane: "Paletten möglich pro Bahn",
+      kpi_palletsTotal: "Paletten gesamt",
+      kpi_enough: "Ausreichend",
+      kpi_diff: "Differenz (Bogen)",
+
+      hint_footer:
+        "Gewicht und Durchmesser funktionieren ohne Bogenlänge. Bogen und Paletten benötigen eine Bogenlänge. Paletten benötigen die Angabe Bogen pro Palette.",
+
+      msg_input: "EINGABE?",
+      msg_diameter: "DURCHMESSER?",
+      msg_length: "LÄNGE?",
+      msg_ok: "OK",
+      yes: "JA",
+      no: "NEIN"
+    },
+
+    en: {
+      title: "Roll to Sheet Calculator",
+      subtitle: "Reel length, sheets, pallets and order check. Also calculates reel weight and diameter.",
+
+      lbl_dOut: "Outer reel diameter (mm)",
+      ph_dOut: "Example 1600",
+
+      lbl_dCore: "Core diameter (mm)",
+
+      lbl_thickness: "Material thickness (µm)",
+      ph_thickness: "Example 380",
+
+      lbl_grammage: "Grammage (g/m²)",
+      ph_grammage: "Example 265",
+
+      lbl_rollWidth: "Reel width (mm)",
+      ph_rollWidth: "Example 2180",
+
+      lbl_rollWeightKg: "Reel weight (kg)",
+      ph_rollWeightKg: "Example 2500",
+
+      hint_weight:
+        "If the outer diameter is empty, it will be calculated from reel weight, grammage, reel width, core diameter and material thickness and written into the diameter field. " +
+        "If the reel weight is empty, it will be calculated from outer diameter, grammage and reel width and written into the reel weight field.",
+
+      lbl_sheetLen: "Sheet length (mm)",
+      ph_sheetLen: "Example 850 becomes 850.5",
+
+      lbl_lanes: "Number of lanes",
+      opt_lane_1: "1 lane",
+      opt_lane_2: "2 lanes",
+      opt_lane_3: "3 lanes",
+      opt_lane_4: "4 lanes",
+      opt_lane_5: "5 lanes",
+      opt_lane_6: "6 lanes",
+      opt_lane_7: "7 lanes",
+      opt_lane_8: "8 lanes",
+
+      hint_lanes: "Total sheets equals sheets per lane multiplied by the number of lanes.",
+
+      lbl_sheetsPer: "Sheets per pallet",
+      ph_sheetsPer: "Example 2000",
+
+      lbl_needed: "Sheets still needed",
+      ph_needed: "Example 8500",
+
+      btn_calc: "CALCULATE",
+
+      sec_reel: "REEL",
+      sec_sheets: "SHEETS AND PALLETS",
+      sec_order: "ORDER CHECK",
+
+      kpi_rollLen: "Reel length (m)",
+      kpi_rollWeight: "Reel weight (kg)",
+      kpi_sheetsLane: "Sheets per lane",
+      kpi_sheetsTotal: "Total sheets",
+      kpi_palletsLane: "Pallets possible per lane",
+      kpi_palletsTotal: "Total pallets",
+      kpi_enough: "Sufficient",
+      kpi_diff: "Difference (sheets)",
+
+      hint_footer:
+        "Weight and diameter work without sheet length. Sheets and pallets require a sheet length. Pallets require sheets per pallet.",
+
+      msg_input: "INPUT?",
+      msg_diameter: "DIAMETER?",
+      msg_length: "LENGTH?",
+      msg_ok: "OK",
+      yes: "YES",
+      no: "NO"
+    },
+
+    nl: {
+      title: "Rol naar Vel Calculator",
+      subtitle: "Rollengte, vellen, pallets en ordercheck. Berekent ook rolgewicht en diameter.",
+
+      lbl_dOut: "Buitendiameter rol (mm)",
+      ph_dOut: "Voorbeeld 1600",
+
+      lbl_dCore: "Kerndiameter (mm)",
+
+      lbl_thickness: "Materiaaldikte (µm)",
+      ph_thickness: "Voorbeeld 380",
+
+      lbl_grammage: "Grammage (g/m²)",
+      ph_grammage: "Voorbeeld 265",
+
+      lbl_rollWidth: "Rolbreedte (mm)",
+      ph_rollWidth: "Voorbeeld 2180",
+
+      lbl_rollWeightKg: "Rolgewicht (kg)",
+      ph_rollWeightKg: "Voorbeeld 2500",
+
+      hint_weight:
+        "Als de buitendiameter leeg is, wordt deze berekend uit rolgewicht, grammage, rolbreedte, kerndiameter en materiaaldikte en ingevuld in het diameterveld. " +
+        "Als het rolgewicht leeg is, wordt dit berekend uit buitendiameter, grammage en rolbreedte en ingevuld in het rolgewichtveld.",
+
+      lbl_sheetLen: "Vellengte (mm)",
+      ph_sheetLen: "Voorbeeld 850 wordt 850,5",
+
+      lbl_lanes: "Aantal banen",
+      opt_lane_1: "1 baan",
+      opt_lane_2: "2 banen",
+      opt_lane_3: "3 banen",
+      opt_lane_4: "4 banen",
+      opt_lane_5: "5 banen",
+      opt_lane_6: "6 banen",
+      opt_lane_7: "7 banen",
+      opt_lane_8: "8 banen",
+
+      hint_lanes: "Totaal aantal vellen is vellen per baan maal het aantal banen.",
+
+      lbl_sheetsPer: "Vellen per pallet",
+      ph_sheetsPer: "Voorbeeld 2000",
+
+      lbl_needed: "Nog benodigde vellen",
+      ph_needed: "Voorbeeld 8500",
+
+      btn_calc: "BEREKENEN",
+
+      sec_reel: "ROL",
+      sec_sheets: "VELLEN EN PALLETS",
+      sec_order: "ORDERCHECK",
+
+      kpi_rollLen: "Rollengte (m)",
+      kpi_rollWeight: "Rolgewicht (kg)",
+      kpi_sheetsLane: "Vellen per baan",
+      kpi_sheetsTotal: "Totaal aantal vellen",
+      kpi_palletsLane: "Pallets mogelijk per baan",
+      kpi_palletsTotal: "Pallets totaal",
+      kpi_enough: "Voldoende",
+      kpi_diff: "Verschil (vellen)",
+
+      hint_footer:
+        "Gewicht en diameter werken zonder vellengte. Vellen en pallets hebben een vellengte nodig. Pallets hebben vellen per pallet nodig.",
+
+      msg_input: "INVOER?",
+      msg_diameter: "DIAMETER?",
+      msg_length: "LENGTE?",
+      msg_ok: "OK",
+      yes: "JA",
+      no: "NEE"
+    },
+
+    fi: {
+      title: "Rulla–arkki-laskuri",
+      subtitle: "Rullan pituus, arkit, lavat ja tilaustarkistus. Laskee myös painon ja halkaisijan.",
+
+      lbl_dOut: "Rullan ulkohalkaisija (mm)",
+      ph_dOut: "Esim. 1600",
+
+      lbl_dCore: "Hylsyn halkaisija (mm)",
+
+      lbl_thickness: "Materiaalin paksuus (µm)",
+      ph_thickness: "Esim. 380",
+
+      lbl_grammage: "Neliömassa (g/m²)",
+      ph_grammage: "Esim. 265",
+
+      lbl_rollWidth: "Rullan leveys (mm)",
+      ph_rollWidth: "Esim. 2180",
+
+      lbl_rollWeightKg: "Rullan paino (kg)",
+      ph_rollWeightKg: "Esim. 2500",
+
+      hint_weight:
+        "Jos ulkohalkaisija on tyhjä, se lasketaan rullan painosta, neliömassasta, leveydestä, hylsystä ja paksuudesta ja kirjoitetaan halkaisijakenttään. " +
+        "Jos rullan paino on tyhjä, se lasketaan ulkohalkaisijasta, neliömassasta ja leveydestä ja kirjoitetaan painokenttään.",
+
+      lbl_sheetLen: "Arkin pituus (mm)",
+      ph_sheetLen: "Esim. 850 -> 850,5",
+
+      lbl_lanes: "Kaistojen määrä",
+      opt_lane_1: "1 kaista",
+      opt_lane_2: "2 kaistaa",
+      opt_lane_3: "3 kaistaa",
+      opt_lane_4: "4 kaistaa",
+      opt_lane_5: "5 kaistaa",
+      opt_lane_6: "6 kaistaa",
+      opt_lane_7: "7 kaistaa",
+      opt_lane_8: "8 kaistaa",
+
+      hint_lanes: "Arkkien kokonaismäärä = arkit per kaista × kaistojen määrä.",
+
+      lbl_sheetsPer: "Arkkeja per lava",
+      ph_sheetsPer: "Esim. 2000",
+
+      lbl_needed: "Tarvittavat arkit",
+      ph_needed: "Esim. 8500",
+
+      btn_calc: "LASKE",
+
+      sec_reel: "RULLA",
+      sec_sheets: "ARKIT JA LAVAT",
+      sec_order: "TILAUSTARKISTUS",
+
+      kpi_rollLen: "Rullan pituus (m)",
+      kpi_rollWeight: "Rullan paino (kg)",
+      kpi_sheetsLane: "Arkkeja per kaista",
+      kpi_sheetsTotal: "Arkkien kokonaismäärä",
+      kpi_palletsLane: "Lavoja per kaista",
+      kpi_palletsTotal: "Lavat yhteensä",
+      kpi_enough: "Riittävä",
+      kpi_diff: "Erotus (arkkia)",
+
+      hint_footer:
+        "Paino ja halkaisija toimivat ilman arkin pituutta. Arkit ja lavat vaativat arkin pituuden. Lavat vaativat arkkia per lava.",
+
+      msg_input: "SYÖTTÖ?",
+      msg_diameter: "HALKAISIJA?",
+      msg_length: "PITUUS?",
+      msg_ok: "OK",
+      yes: "KYLLÄ",
+      no: "EI"
+    }
+  };
+
+  function applyLangButtons(lang){
+    ["de","en","nl","fi"].forEach(k=>{
+      const b = document.getElementById("lang-"+k);
+      if(!b) return;
+      if(k === lang){ b.classList.add("active"); }
+      else { b.classList.remove("active"); }
+    });
+  }
+
+  function t(key){
+    const pack = I18N[currentLang] || I18N.de;
+    return pack[key] ?? (I18N.de[key] ?? key);
+  }
+
+  function setLang(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+
+    // text nodes
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const key = el.getAttribute("data-i18n");
+      el.textContent = t(key);
+    });
+
+    // placeholders
+    document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+      const key = el.getAttribute("data-i18n-ph");
+      el.setAttribute("placeholder", t(key));
+    });
+
+    // document title
+    document.title = t("title");
+
+    applyLangButtons(lang);
+  }
+
+  // default
+  setLang("de");
+</script>
+
+<script>
+  /* =========================
+     ORIGINAL CALCULATION CODE
+     (unchanged formulas)
+     ========================= */
+
   function n(v){
     return Number((v || "").toString().trim().replace(",", "."));
   }
@@ -406,23 +775,24 @@
 
     let dOut = n(dOutEl.value);
     const dCore = n(dCoreEl.value);
-    const t = n(thicknessEl.value);
+    const tVal = n(thicknessEl.value);
     const sl = n(sheetLenEl.value);
-    const lanes = n(lanesEl.value) || 1;
+    const lanesVal = n(lanesEl.value) || 1;
     const sp = n(sheetsPerEl.value);
     const need = n(neededEl.value);
     const g = n(grammageEl.value);
     const rw = n(rollWidthEl.value);
     const kgIn = n(rollWeightEl.value);
 
-    if(!(dCore > 0) || !(t > 0)){
-      setEnough("EINGABE?", true);
+    if(!(dCore > 0) || !(tVal > 0)){
+      setEnough(t("msg_input"), true);
       updateRollWeightView();
       return;
     }
 
+    // If dOut is empty, calculate it from weight (only if weight/g/rw are provided)
     if(!(dOut > 0) && (kgIn > 0) && (g > 0) && (rw > 0)){
-      const dCalc = calcOuterDiaFromWeightKg(kgIn, g, rw, dCore, t);
+      const dCalc = calcOuterDiaFromWeightKg(kgIn, g, rw, dCore, tVal);
       if(dCalc){
         dOut = dCalc;
         dOutEl.value = formatComma(dCalc.toFixed(0));
@@ -430,20 +800,21 @@
     }
 
     if(!(dOut > dCore)){
-      setEnough("DURCHMESSER?", true);
+      setEnough(t("msg_diameter"), true);
       updateRollWeightView();
       return;
     }
 
-    const len = calcLengthFromDia(dOut, dCore, t);
+    const len = calcLengthFromDia(dOut, dCore, tVal);
     if(!(len > 0)){
-      setEnough("LÄNGE?", true);
+      setEnough(t("msg_length"), true);
       updateRollWeightView();
       return;
     }
 
     document.getElementById("rollLen").textContent = len.toFixed(1);
 
+    // If roll weight is empty, calculate it from length (only if g/rw are provided)
     if(g > 0 && rw > 0){
       const kgCalc = calcWeightFromLength(len, g, rw);
       if(!(kgIn > 0)){
@@ -453,13 +824,14 @@
 
     updateRollWeightView();
 
+    // Without sheet length: stop here (still OK)
     if(!(sl > 0)){
-      setEnough("OK", false);
+      setEnough(t("msg_ok"), false);
       return;
     }
 
     const perLane = (len * 1000) / sl;
-    const total = perLane * lanes;
+    const total = perLane * lanesVal;
 
     document.getElementById("sheetsLane").textContent = Math.round(perLane).toString();
     document.getElementById("sheetsTotal").textContent = Math.round(total).toString();
@@ -474,9 +846,9 @@
     if(Number.isFinite(need) && need >= 0){
       const diffv = Math.round(total - need);
       document.getElementById("diff").textContent = diffv.toString();
-      setEnough(diffv >= 0 ? "JA" : "NEIN", diffv < 0);
+      setEnough(diffv >= 0 ? t("yes") : t("no"), diffv < 0);
     } else {
-      setEnough("OK", false);
+      setEnough(t("msg_ok"), false);
     }
   }
 
