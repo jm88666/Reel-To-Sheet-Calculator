@@ -2,44 +2,340 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Roll-to-Sheet Calculator</title>
+  <title>Rollen-zu-Bogen Rechner</title>
+
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      margin: 0;
+      background: #f4f6fb;
+      color: #111;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 22px;
+      background: #0a7a2f;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+      margin-bottom: 20px;
+    }
+
+    .logoBox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      min-width: 180px;
+      height: 92px;
+      box-sizing: border-box;
+      border: 2px solid rgba(0,0,0,0.08);
+    }
+
+    .siteLabel {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #0a7a2f;
+      text-transform: uppercase;
+    }
+
+    .titleblock h1 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 900;
+      color: #111;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      margin-top: 6px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 1000px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 12px 0 6px;
+      color: #111;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cfd6e4;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      margin-top: 18px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 0;
+      background: #00b56a;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn:hover { background: #009a59; }
+    .btn:active { background: #008a4f; transform: translateY(1px); }
+
+    .out {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .kpi {
+      background: #f3f6ff;
+      border: 1px solid #dbe5ff;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .kpi .t {
+      font-size: 13px;
+      color: #334;
+      font-weight: 700;
+    }
+
+    .kpi .v {
+      font-size: 20px;
+      font-weight: 900;
+      margin-top: 4px;
+      color: #111;
+    }
+
+    .ok { color: #0a7a2f; }
+    .bad { color: #b00020; }
+
+    .small {
+      font-size: 12px;
+      color: #555;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+  </style>
 </head>
-<body style="font-family:Arial;padding:20px">
 
-<h1>Roll-to-Sheet Calculator</h1>
+<body>
+<div class="wrap">
 
-<label>Rollengewicht (kg)<br><input id="kg" type="number"></label><br><br>
-<label>Grammatur (g/m²)<br><input id="g" type="number"></label><br><br>
-<label>Rollenbreite (mm)<br><input id="w" type="number"></label><br><br>
-<label>Bogenlänge (mm)<br><input id="l" type="number"></label><br><br>
-<label>Banen (1–8)<br><input id="lanes" type="number" value="8"></label><br><br>
+  <div class="topbar">
+    <div class="logoBox">
+      <div class="siteLabel">Bainfurt</div>
+    </div>
 
-<button onclick="calc()">Berekenen</button>
+    <div class="titleblock">
+      <h1>Rollen-zu-Bogen Rechner</h1>
+      <div class="subtitle">
+        Schneller &Uuml;berblick &uuml;ber Rollenl&auml;nge, Bogenanzahl, Sets und ob der Auftrag erf&uuml;llt wird.
+      </div>
+    </div>
+  </div>
 
-<hr>
+  <div class="grid">
 
-<p>Oppervlak (m²): <b id="area">-</b></p>
-<p>Rollenlengte (m): <b id="len">-</b></p>
-<p>Bogen: <b id="sheets">-</b></p>
+    <div class="card">
+      <label>Au&szlig;endurchmesser der Rolle (mm)</label>
+      <input id="dOut" placeholder="Beispiel 1600">
+
+      <div class="row">
+        <div>
+          <label>Kerndurchmesser (mm)</label>
+          <input id="dCore" value="330">
+        </div>
+        <div>
+          <label>Materialst&auml;rke (&micro;m)</label>
+          <input id="thickness" placeholder="Beispiel 380">
+        </div>
+      </div>
+
+      <label>Bogenl&auml;nge (mm)</label>
+      <input id="sheetLen" placeholder="Beispiel 850 &rarr; wird 850,5" onblur="enforceHalf(this)">
+
+      <label>Anzahl der Bahnen</label>
+      <select id="lanes">
+        <option value="1">1 Bahn</option>
+        <option value="2">2 Bahnen</option>
+        <option value="3">3 Bahnen</option>
+        <option value="4">4 Bahnen</option>
+        <option value="5">5 Bahnen</option>
+        <option value="6">6 Bahnen</option>
+        <option value="7">7 Bahnen</option>
+        <option value="8">8 Bahnen</option>
+      </select>
+      <div class="small">
+        Nur die Gesamtanzahl der Bogen wird mit der Anzahl der Bahnen multipliziert.
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Bogen pro Palette</label>
+          <input id="sheetsPer" placeholder="Beispiel 2000">
+        </div>
+        <div>
+          <label>Noch ben&ouml;tigte Bogen</label>
+          <input id="needed" placeholder="Beispiel 8500">
+        </div>
+      </div>
+
+      <button class="btn" id="calcBtn">BERECHNEN</button>
+    </div>
+
+    <div class="card">
+      <div class="out">
+        <div class="kpi">
+          <div class="t">Rollenl&auml;nge (m)</div>
+          <div class="v" id="rollLen">.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="t">Bogen pro Bahn</div>
+          <div class="v" id="sheetsLane">.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="t">Gesamtanzahl Bogen</div>
+          <div class="v" id="sheetsTotal">.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="t">M&ouml;gliche Sets (pro Bahn)</div>
+          <div class="v" id="sets">.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="t">Ausreichend</div>
+          <div class="v" id="enough">.</div>
+        </div>
+
+        <div class="kpi">
+          <div class="t">Differenz (Bogen)</div>
+          <div class="v" id="diff">.</div>
+        </div>
+      </div>
+
+      <div class="small">
+        Hinweis: Sets werden pro Bahn berechnet. Die Gesamtanzahl der Bogen bezieht sich auf alle Bahnen.
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
-function calc(){
-  const kg=+kgEl.value;
-  const g=+gEl.value;
-  const w=+wEl.value/1000;
-  const l=+lEl.value/1000;
-  const lanes=+lanesEl.value;
-  const area=(kg*1000)/g;
-  const len=area/w;
-  const sheets=(len/l)*lanes;
-  areaEl.textContent=area.toFixed(1);
-  lenEl.textContent=len.toFixed(1);
-  sheetsEl.textContent=Math.floor(sheets);
-}
-const kgEl=kg,gEl=g,wEl=w,lEl=l,lanesEl=lanes;
-const areaEl=area,lenEl=len,sheetsEl=sheets;
-</script>
+  function n(v){
+    return Number((v || "").toString().replace(",", "."));
+  }
 
+  function enforceHalf(input){
+    if(!input) return;
+    let raw = (input.value || "").toString().trim();
+    if(!raw) return;
+
+    raw = raw.replace(",", ".");
+    const num0 = Number(raw);
+    if(!Number.isFinite(num0)) return;
+
+    const num = Math.floor(num0) + 0.5;
+    input.value = num.toString().replace(".", ",");
+  }
+
+  function calc(){
+    const dOutEl = document.getElementById("dOut");
+    const dCoreEl = document.getElementById("dCore");
+    const thicknessEl = document.getElementById("thickness");
+    const sheetLenEl = document.getElementById("sheetLen");
+    const lanesEl = document.getElementById("lanes");
+    const sheetsPerEl = document.getElementById("sheetsPer");
+    const neededEl = document.getElementById("needed");
+
+    enforceHalf(sheetLenEl);
+
+    const dOut = n(dOutEl.value);
+    const dCore = n(dCoreEl.value);
+    const t = n(thicknessEl.value);
+    const sl = n(sheetLenEl.value);
+    const lanes = n(lanesEl.value) || 1;
+    const sp = n(sheetsPerEl.value);
+    const need = n(neededEl.value);
+
+    if(!Number.isFinite(dOut) || !Number.isFinite(dCore) || !Number.isFinite(t) || !Number.isFinite(sl)) return;
+    if(dOut <= dCore) return;
+    if(t <= 0 || sl <= 0) return;
+
+    const len = ((Math.PI / (4 * (t / 1000))) * (dOut * dOut - dCore * dCore)) / 1000;
+    const perLane = (len * 1000) / sl;
+    const total = perLane * lanes;
+
+    document.getElementById("rollLen").textContent = len.toFixed(1);
+    document.getElementById("sheetsLane").textContent = Math.round(perLane).toString();
+    document.getElementById("sheetsTotal").textContent = Math.round(total).toString();
+
+    if(Number.isFinite(sp) && sp > 0){
+      document.getElementById("sets").textContent = (perLane / sp).toFixed(2);
+    } else {
+      document.getElementById("sets").textContent = ".";
+    }
+
+    const enoughEl = document.getElementById("enough");
+    if(Number.isFinite(need) && need >= 0){
+      const diffv = Math.round(total - need);
+      document.getElementById("diff").textContent = diffv.toString();
+      enoughEl.textContent = diffv >= 0 ? "JA" : "NEIN";
+      enoughEl.className = "v " + (diffv >= 0 ? "ok" : "bad");
+    } else {
+      document.getElementById("diff").textContent = ".";
+      enoughEl.textContent = ".";
+      enoughEl.className = "v";
+    }
+  }
+
+  document.getElementById("calcBtn").addEventListener("click", calc);
+</script>
 </body>
 </html>
+
