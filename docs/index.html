@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roll-to-Sheet Calculator</title>
+</head>
+<body style="font-family:Arial;padding:20px">
+
+<h1>Roll-to-Sheet Calculator</h1>
+
+<label>Rollengewicht (kg)<br><input id="kg" type="number"></label><br><br>
+<label>Grammatur (g/m²)<br><input id="g" type="number"></label><br><br>
+<label>Rollenbreite (mm)<br><input id="w" type="number"></label><br><br>
+<label>Bogenlänge (mm)<br><input id="l" type="number"></label><br><br>
+<label>Banen (1–8)<br><input id="lanes" type="number" value="8"></label><br><br>
+
+<button onclick="calc()">Berekenen</button>
+
+<hr>
+
+<p>Oppervlak (m²): <b id="area">-</b></p>
+<p>Rollenlengte (m): <b id="len">-</b></p>
+<p>Bogen: <b id="sheets">-</b></p>
+
+<script>
+function calc(){
+  const kg=+kgEl.value;
+  const g=+gEl.value;
+  const w=+wEl.value/1000;
+  const l=+lEl.value/1000;
+  const lanes=+lanesEl.value;
+  const area=(kg*1000)/g;
+  const len=area/w;
+  const sheets=(len/l)*lanes;
+  areaEl.textContent=area.toFixed(1);
+  lenEl.textContent=len.toFixed(1);
+  sheetsEl.textContent=Math.floor(sheets);
+}
+const kgEl=kg,gEl=g,wEl=w,lEl=l,lanesEl=lanes;
+const areaEl=area,lenEl=len,sheetsEl=sheets;
+</script>
+
+</body>
+</html>
